@@ -22,7 +22,7 @@ obtainContinents((err, continentUrls) => {
         speciesList = speciesList.concat(speciesUrls);
 
         if (resCtr >= numContinents) {
-          console.log(uniq(speciesList).length);
+          console.log(uniq(speciesList));
         }
       }
     });
@@ -35,19 +35,3 @@ function uniq(a) {
     return encountered.hasOwnProperty(el) ? false : (encountered[el] = true);
   });
 }
-
-// obtainLinks((err, links) => {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//
-//     obtainSpecies(links, (err, speciesInfo) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log(speciesInfo);
-//       }
-//     });
-//
-//   }
-// });
