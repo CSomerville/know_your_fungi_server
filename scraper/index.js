@@ -1,18 +1,53 @@
+const obtainContinents = require('./scraper/obtainContinents');
 const obtainLinks = require('./scraper/obtainLinks');
 const obtainSpecies = require('./scraper/obtainSpecies');
 
-obtainLinks((err, links) => {
+obtainContinents((err, continentUrls) => {
+
   if (err) {
-    console.log(err);
+    console.warn(err);
   } else {
 
-    obtainSpecies(links, (err, speciesInfo) => {
+    let speciesList = [];
+    const numContinents = continentUrls.length;
+    let resCtr = 0;
+
+    obtainLinks(continentUrls, (err, speciesUrls) => {
       if (err) {
-        console.log(err);
+        resCtr++;
+        console.warn(err);
       } else {
-        console.log(speciesInfo);
+
+        resCtr++;
+        speciesList = speciesList.concat(speciesUrls);
+
+        if (resCtr >= numContinents) {
+          console.log(uniq(speciesList).length);
+        }
       }
     });
-    
   }
 });
+
+function uniq(a) {
+  const encountered = {};
+  return a.filter(el => {
+    return encountered.hasOwnProperty(el) ? false : (encountered[el] = true);
+  });
+}
+
+// obtainLinks((err, links) => {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//
+//     obtainSpecies(links, (err, speciesInfo) => {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         console.log(speciesInfo);
+//       }
+//     });
+//
+//   }
+// });

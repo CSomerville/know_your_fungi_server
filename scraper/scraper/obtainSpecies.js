@@ -2,6 +2,10 @@ const request = require('request');
 const cheerio = require('cheerio');
 
 module.exports = function obtainSpecies(urlList, done) {
+  /* @param { Array : String } url fragments
+     @param { Function } -
+                @param { Error | null }
+                @param { Object | null } species data fields */
 
   const base = "https://en.wikipedia.org";
 
@@ -23,8 +27,8 @@ module.exports = function obtainSpecies(urlList, done) {
 }
 
 function parseInfoBox(body) {
-  /* arg is html string.
-     return is { String } representing species data */
+  /* @param { String } html
+     @return { Object : String } representing species data */
 
   const $ = cheerio.load(body);
   const infoBox = $('.infobox');
