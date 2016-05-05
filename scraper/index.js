@@ -22,7 +22,14 @@ obtainContinents((err, continentUrls) => {
         speciesList = speciesList.concat(speciesUrls);
 
         if (resCtr >= numContinents) {
-          console.log(uniq(speciesList));
+
+          obtainSpecies(speciesList.slice(0, 10), (err, arr) => {
+            if (err) {
+              console.warn(err);
+            } else {
+              console.log(arr);
+            }
+          })
         }
       }
     });

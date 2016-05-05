@@ -46,5 +46,8 @@ function parseInfoBox(body) {
   const imageSrc = infoBox.find('img').attr('src');
   if (imageSrc) values['imageSource'] = imageSrc;
 
+  const firstParagraph = $('#mw-content-text').children().eq(1).text();
+  values['firstParagraph'] = firstParagraph;
+
   return values;
 }

@@ -18,11 +18,16 @@ module.exports = function obtainLinks(urls, done) {
 }
 
 function manageObtainLinks() {
-  // wrapper function to recursively scrape paginated species lists
+  /*  @return { Function }
+      notes: wrapper for recursion */
   let speciesMasterList = [];
 
   return function getOnePage(urlFragment, done) {
-    // Scrapes one page. Calls itself on next page, or done if no next page.
+    /*  @param { String } url
+        @param { Function } -
+                  @param { Error | null }
+                  @param { Array : String } url fragments (species pages)
+        notes: calls itself on next page; if no next page, calls done */
 
     request.get(BASE + urlFragment, (err, res, body) => {
 
@@ -50,6 +55,9 @@ function manageObtainLinks() {
 }
 
 function speciesLinks($) {
+  /*  @param { Function } parsed DOM returned by cheerio.load()
+      @return { Array : String } urlFragments */
+
   const speciesAnchors = $('#mw-pages').find('.mw-content-ltr').find('a');
   let speciesLinksList = [];
 
@@ -61,6 +69,9 @@ function speciesLinks($) {
 }
 
 function getNextPage($) {
+  /*  @param { Function } parsed DOM returned by cheerio.load()
+      @return { Array : DOMNode } anchor tags with text value of 'next page' */
+      
   const allLinks = $('#mw-pages').find('a');
   return Array.from(allLinks).filter(el => {
     return $(el).text() === 'next page';
