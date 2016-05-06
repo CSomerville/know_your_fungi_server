@@ -1,40 +1,71 @@
 const obtainContinents = require('./scraper/obtainContinents');
 const obtainLinks = require('./scraper/obtainLinks');
 const obtainSpecies = require('./scraper/obtainSpecies');
+const queries = require('./db/queries');
 
-obtainContinents((err, continentUrls) => {
+main();
 
-  if (err) {
-    console.warn(err);
-  } else {
+function main() {
+  obtainContinents((err, continentUrls) => {
 
-    let speciesList = [];
-    const numContinents = continentUrls.length;
-    let resCtr = 0;
+    if (err) {
+      console.warn(err);
+    } else {
 
-    obtainLinks(continentUrls, (err, speciesUrls) => {
+      let speciesList = [];
+      const numContinents = continentUrls.length;
+      let resCtr = 0;
+
+      obtainLinks(continentUrls, (err, speciesUrls) => {
+        if (err) {
+          resCtr++;
+          console.warn(err);
+        } else {
+
+          resCtr++;
+          speciesList = speciesList.concat(speciesUrls);
+
+          if (resCtr >= numContinents) {
+            const uniqueSpecies = uniq(speciesList);
+            console.log(`# of unique species: ${uniqueSpecies.length}`);
+            throttleQueries(uniqueSpecies);
+          }
+        }
+      });
+    }
+  });
+}
+
+function throttleQueries(speciesList) {
+
+  const STEP_SIZE = 100;
+  const len = speciesList.length;
+  let ctr = 0;
+
+  const interval = setInterval(() => {
+
+    if (ctr >= len) {
+      clearInterval(interval);
+      return;
+    }
+    console.log(ctr);
+    const urlList = speciesList.slice(ctr, ctr+STEP_SIZE);
+    obtainSpecies(urlList, (err, speciesData) => {
+
       if (err) {
-        resCtr++;
         console.warn(err);
       } else {
-
-        resCtr++;
-        speciesList = speciesList.concat(speciesUrls);
-
-        if (resCtr >= numContinents) {
-
-          obtainSpecies(speciesList.slice(0, 10), (err, arr) => {
-            if (err) {
-              console.warn(err);
-            } else {
-              console.log(arr);
-            }
-          })
-        }
+        queries.insertRawData(speciesData)
+          .catch(err => console.warn(err));
       }
     });
-  }
-});
+
+    ctr += STEP_SIZE;
+
+  }, 60*1000);
+
+}
+
 
 function uniq(a) {
   const encountered = {};

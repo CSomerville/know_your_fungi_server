@@ -1,5 +1,4 @@
 const uuid = require('node-uuid');
-const camelize = require('camelize');
 const conn = require('./connection');
 
 let queries = {};
@@ -23,7 +22,8 @@ queries.insertRawData = function(obj) {
     ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
   `;
 
-  const values = camelize(fields).map(field => {
+  const values = fields.map(camelize).map(field => {
+    if (field === 'taxonomicOrder') return defaultToEmpty(obj['order']);
     return defaultToEmpty(obj[field]);
   });
 
@@ -37,4 +37,13 @@ function defaultToEmpty(data) {
       @return { String } */
 
   return data || '';
+}
+
+function camelize(str) {
+  /* @param { String } snakeCased
+     @return { String } camelized
+     quick and dirty--sorry! */
+  return str.split('_').map((subStr, i) => {
+    return (i > 0) ? subStr.slice(0,1).toUpperCase() + subStr.slice(1) : subStr;
+  }).join('');
 }
