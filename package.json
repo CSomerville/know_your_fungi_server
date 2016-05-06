@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "camelize": "^1.0.0",
     "cheerio": "^0.20.0",
+    "node-uuid": "^1.4.7",
     "pg-promise": "^4.0.5",
     "request": "^2.72.0"
   }
