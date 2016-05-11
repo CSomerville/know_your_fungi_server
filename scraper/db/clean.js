@@ -75,7 +75,12 @@ const addTaxonomicLevel = (opts) => {
         parentData.forEach(el => {
           formattedParent[el[opts.parent]] = el.id;
         });
-        return t.many(`SELECT DISTINCT ${opts.current}, ${opts.parent} FROM raw_data WHERE NOT ${opts.current}='' AND NOT ${opts.parent}='';`)
+
+        if (opts.current === 'species') {
+          return t.many(`SELECT * FROM raw_data WHERE NOT ${opts.current}='' AND NOT ${opts.parent}='';`);
+        } else {
+          return t.many(`SELECT DISTINCT ${opts.current}, ${opts.parent} FROM raw_data WHERE NOT ${opts.current}='' AND NOT ${opts.parent}='';`)
+        }
       })
       .then(data => {
 
