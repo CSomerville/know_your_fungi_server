@@ -7,6 +7,9 @@ const api = express.Router();
 api.use(bodyParser.json());
 
 api.get('/fungi', handlers.getFungi);
-api.get('/species/:id', handlers.getSpecies);
+api.get('/divisions/:id', handlers.getDivision);
+api.get('/classes/:id', handlers.getClass);
+api.get('/orders/:id', handlers.getOrder);
+api.get('/families/:id', handlers.getFamily);
 
 module.exports = api;

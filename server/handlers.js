@@ -9,8 +9,26 @@ handlers.getFungi = function(req, res) {
     .catch(err => res.sendStatus(500));
 }
 
-handlers.getSpecies = function(req, res) {
-  queries.getSpecies(req.params.id)
+handlers.getDivision = function(req, res) {
+  queries.getTaxonomicLevel(req.params.id, 0)
     .then(data => res.send(data))
-    .catch(err => res.sendStatus(500));
+    .catch(err => { res.sendStatus(500) });
+}
+
+handlers.getClass = function(req, res) {
+  queries.getTaxonomicLevel(req.params.id, 1)
+    .then(data => res.send(data))
+    .catch(err => { console.log(err); res.sendStatus(500) });
+}
+
+handlers.getOrder = function(req, res) {
+  queries.getTaxonomicLevel(req.params.id, 2)
+    .then(data => res.send(data))
+    .catch(err => { res.sendStatus(500) });
+}
+
+handlers.getFamily = function(req, res) {
+  queries.getTaxonomicLevel(req.params.id, 3)
+    .then(data => res.send(data))
+    .catch(err => { res.sendStatus(500) });
 }
