@@ -21,7 +21,7 @@ function col(name, prop, init) {
 }
 
 var cs = new conn.pgp.helpers.ColumnSet([
-    col('id'), col('kingdom', col('division'), col('class'), col('family'), col('genus'), col('species')),
+    col('id'), col('kingdom'), col('division'), col('class'), col('family'), col('genus'), col('species'),
     col('taxonomic_order', 'taxonomicOrder', defaultSpecial),
     col('first_paragraph', 'firstParagraph'),
     col('image_source', 'imageSource')],
